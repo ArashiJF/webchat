@@ -84,12 +84,11 @@ export class UsersController {
 
   //getting a list of all the users in the database, from here onwards we will apply authentication.for that
   //We will add a post for login
-
+  
   @authenticate('BasicStrategy')
   @post('/users/login')
   async login(){
     return {token: this.user.token};
-    }
   }
 
 

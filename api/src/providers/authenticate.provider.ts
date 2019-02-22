@@ -12,7 +12,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
     constructor(
         @inject(AuthenticationBindings.METADATA)
         private metadata: AuthenticationMetadata,
-        @repository(UserRepository) public UsersRepo: UserRepository,
+        @repository(UserRepository) public userRepository: UserRepository,
     ) {}
     
     value(): ValueOrPromise<Strategy | undefined>{
@@ -68,7 +68,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
         ) => void,
     ){
         //we need to find the user that is trying to log in into the database
-        await this.UsersRepo.find()
+        await this.userRepository.find()
         .then(
         users => {
             //we use filter to check wether the username and the password match,
