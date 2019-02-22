@@ -63,4 +63,5 @@ api-docs/
 # Transpiled JavaScript files from Typescript
 /dist
 
+# ignore node modules
 /node_modules

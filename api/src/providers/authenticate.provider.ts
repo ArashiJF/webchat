@@ -1,18 +1,19 @@
 import { Provider, inject, ValueOrPromise } from '@loopback/context';
 import { Strategy } from 'passport';
-import { AuthenticationBindings, AuthenticationMetadata, UserProfile } from '@loopback/authentication';
+import { AuthenticationBindings, AuthenticationMetadata } from '@loopback/authentication';
 import { BasicStrategy } from 'passport-http';
 import { Strategy as BearerStrategy} from 'passport-http-bearer';
 import { UserRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { verify, sign } from 'jsonwebtoken';
 
+
 export class AuthenticationProvider implements Provider<Strategy | undefined> {
     constructor(@inject(AuthenticationBindings.METADATA)
     private metadata: AuthenticationMetadata,
-    public UserRepository: UserRepository,
+    @repository(UserRepository) public UserRepository: UserRepository,
     ) {}
-
+    
     value(): ValueOrPromise<Strategy | undefined>{
         if (!this.metadata){
             return undefined;
@@ -34,7 +35,8 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
                         ) => void
                     ) => this.verifyBasic(username, password, cb),
                 );
-            case 'BearerStrategy':
+
+                case 'BearerStrategy':
                 return new BearerStrategy(
                     (
                         token: string,
@@ -49,8 +51,8 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
             default:
                 return Promise.reject({messae: 'Strategy ${name} not implemented, sorry', status: 400})
         }
-    }    
-    /**
+    } 
+    /*   
      * we will now verify the user credentials to log in
      */
     async verifyBasic(
@@ -86,26 +88,26 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
                 name: user.username,    
                 token: sign(
                     {name: username, id: user.id},
-                    process.env.SECRET_KEY,
+                     process.env.SECRET_KEY || 'nobume',
                 )
             });
           },
           reason => {
-              cb(reason, false)
+              cb(reason, false);
           },
         
         ).catch(reason => {
            cb(reason, false);
-            });
+        });
     }
- 
+    
     async verifytoken(
         token: string,
         cb: (err: Error | null, user?: any) => void,
     ){
         try {
             let payload: any = verify(
-                token, process.env.SECRET_KEY
+                token, process.env.SECRET_KEY || 'nobume'
             );
             cb(null, payload);
         } catch (err){
@@ -113,4 +115,5 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
             cb(err, false);
         }
     }
+        
 }
