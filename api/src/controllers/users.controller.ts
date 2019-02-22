@@ -19,38 +19,82 @@ import {UserRepository} from '../repositories';
 import { inject } from '@loopback/context';
 import { authenticate, AuthenticationBindings } from '@loopback/authentication';
 
+
 export class UsersController {
   constructor(
     @repository(UserRepository)
     public userRepository : UserRepository,
+    @inject(AuthenticationBindings.CURRENT_USER, {optional: true})
+    private user: {name: string; id: string; token: string},
   ) {}
+  
+  // this function checks for us wether the username is not taken already
+  async checkname(Name: string, ID?: string){
+    let x = false;
+    
+    //if we pass the id we are taking into account the user wants to change the password and not the username
+    //but the function would mistakenly mark it as duplicate when he sends the same username so we need to add
 
-  @post('/users', {
+    if (ID){
+      //where looks for any username that doesnt belong to the current user id, that way we ignore if the user
+      //sends his same username to update it for any reason but also we check for username duplicates
+      await this.userRepository.findOne({where: {and: [{username:Name}, {id: {neq: ID}}]}})
+      .then(
+        u => {
+          if (u){
+            x = true;
+          }
+        }
+      )
+
+    }
+    //if an ID is not sent then we just check wether the username is already taken or not
+    else{
+      await this.userRepository.findOne({where: {username: Name}})
+      .then( u => {
+        if (u){
+          x = true;
+        }
+      });
+    }
+    return x;
+  }
+
+  // we can post a user as long as it doesnt exist in the database!
+
+  @post('/users/newuser', {
     responses: {
       '200': {
         description: 'User model instance',
         content: {'application/json': {schema: {'x-ts-type': User}}},
       },
+      '400': {
+        description: 'that username seems taken',
+        content: {'application/json': {schema: {'x-ts-type': User}}},
+      }
     },
   })
   async create(@requestBody() user: User): Promise<User> {
-    return await this.userRepository.create(user);
+    let check = await this.checkname(user.username);
+    if (!check){
+      return await this.userRepository.create(user);
+    }
+    return Promise.reject({status: 400})
   }
 
-  @get('/users/count', {
-    responses: {
-      '200': {
-        description: 'User model count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async count(
-    @param.query.object('where', getWhereSchemaFor(User)) where?: Where,
-  ): Promise<Count> {
-    return await this.userRepository.count(where);
+  //getting a list of all the users in the database, from here onwards we will apply authentication.for that
+  //We will add a post for login
+
+  @authenticate('BasicStrategy')
+  @post('/users/login')
+  async login(){
+    return {token: this.user.token};
+    }
   }
 
+
+  //We will use bearer strategy to use the token when the user logs in
+  @authenticate('BearerStrategy')
   @get('/users', {
     responses: {
       '200': {
@@ -67,21 +111,6 @@ export class UsersController {
     return await this.userRepository.find();
   }
 
-  @patch('/users', {
-    responses: {
-      '200': {
-        description: 'User PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async updateAll(
-    @requestBody() user: User,
-    @param.query.object('where', getWhereSchemaFor(User)) where?: Where,
-  ): Promise<Count> {
-    return await this.userRepository.updateAll(user, where);
-  }
-
   @get('/users/{id}', {
     responses: {
       '200': {
@@ -92,20 +121,6 @@ export class UsersController {
   })
   async findById(@param.path.string('id') id: string): Promise<User> {
     return await this.userRepository.findById(id);
-  }
-
-  @patch('/users/{id}', {
-    responses: {
-      '204': {
-        description: 'User PATCH success',
-      },
-    },
-  })
-  async updateById(
-    @param.path.string('id') id: string,
-    @requestBody() user: User,
-  ): Promise<void> {
-    await this.userRepository.updateById(id, user);
   }
 
   @put('/users/{id}', {

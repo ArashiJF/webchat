@@ -9,12 +9,14 @@ import { verify, sign } from 'jsonwebtoken';
 
 
 export class AuthenticationProvider implements Provider<Strategy | undefined> {
-    constructor(@inject(AuthenticationBindings.METADATA)
-    private metadata: AuthenticationMetadata,
-    @repository(UserRepository) public UserRepository: UserRepository,
+    constructor(
+        @inject(AuthenticationBindings.METADATA)
+        private metadata: AuthenticationMetadata,
+        @repository(UserRepository) public UsersRepo: UserRepository,
     ) {}
     
     value(): ValueOrPromise<Strategy | undefined>{
+        // if the function was not decorated we dont need to apply authentication
         if (!this.metadata){
             return undefined;
         }
@@ -66,7 +68,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
         ) => void,
     ){
         //we need to find the user that is trying to log in into the database
-        await this.UserRepository.find()
+        await this.UsersRepo.find()
         .then(
         users => {
             //we use filter to check wether the username and the password match,
