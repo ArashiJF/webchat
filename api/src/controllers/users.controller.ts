@@ -1,7 +1,6 @@
 import {
   Count,
   CountSchema,
-  Filter,
   repository,
   Where,
 } from '@loopback/repository';
@@ -9,7 +8,6 @@ import {
   post,
   param,
   get,
-  getFilterSchemaFor,
   getWhereSchemaFor,
   patch,
   put,
@@ -18,6 +16,8 @@ import {
 } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
+import { inject } from '@loopback/context';
+import { authenticate, AuthenticationBindings } from '@loopback/authentication';
 
 export class UsersController {
   constructor(

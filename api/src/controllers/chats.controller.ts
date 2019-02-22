@@ -63,25 +63,8 @@ export class ChatsController {
       },
     },
   })
-  async find(
-    @param.query.object('filter', getFilterSchemaFor(Chats)) filter?: Filter,
-  ): Promise<Chats[]> {
-    return await this.chatsRepository.find(filter);
-  }
-
-  @patch('/chats', {
-    responses: {
-      '200': {
-        description: 'Chats PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async updateAll(
-    @requestBody() chats: Chats,
-    @param.query.object('where', getWhereSchemaFor(Chats)) where?: Where,
-  ): Promise<Count> {
-    return await this.chatsRepository.updateAll(chats, where);
+  async find(): Promise<Chats[]> {
+    return await this.chatsRepository.find();
   }
 
   @get('/chats/{id}', {
@@ -94,20 +77,6 @@ export class ChatsController {
   })
   async findById(@param.path.string('id') id: string): Promise<Chats> {
     return await this.chatsRepository.findById(id);
-  }
-
-  @patch('/chats/{id}', {
-    responses: {
-      '204': {
-        description: 'Chats PATCH success',
-      },
-    },
-  })
-  async updateById(
-    @param.path.string('id') id: string,
-    @requestBody() chats: Chats,
-  ): Promise<void> {
-    await this.chatsRepository.updateById(id, chats);
   }
 
   @put('/chats/{id}', {

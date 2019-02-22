@@ -9,12 +9,19 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
+import {AuthenticationProvider} from './providers/authenticate.provider';
+import { AuthenticationBindings } from '@loopback/authentication';
 
 export class Api extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+
+    // we add the provider component for authentication, all the steps taken for this
+    // can be found here https://github.com/strongloop/loopback-next/blob/master/packages/authentication/README.md
+    this.component(AuthenticationProvider);
+    this.bind(AuthenticationBindings.STRATEGY).toProvider(AuthenticationProvider);
 
     // Set up the custom sequence
     this.sequence(MySequence);
