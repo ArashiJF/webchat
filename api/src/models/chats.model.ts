@@ -10,6 +10,12 @@ export class Chats extends Entity {
   id?: string;
 
   @property({
+    type: 'string',
+    default: 'clever title'
+  })
+  title?: string;
+
+  @property({
     type: 'array',
     itemType: 'string',
     required: true,
@@ -23,6 +29,12 @@ export class Chats extends Entity {
   })
   message: Messages[];
 
+  @property({
+    type: 'number',
+    required: true,
+    default: 0
+  })
+  chattype: number;
 
   constructor(data?: Partial<Chats>) {
     super(data);

@@ -16,15 +16,25 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {Chats} from '../models';
-import {ChatsRepository} from '../repositories';
+import {Chats, User} from '../models';
+import {ChatsRepository, UserRepository} from '../repositories';
+import { inject } from '@loopback/context';
+import { authenticate, AuthenticationBindings } from '@loopback/authentication';
+
 
 export class ChatsController {
   constructor(
     @repository(ChatsRepository)
     public chatsRepository : ChatsRepository,
+    @repository(UserRepository)
+    public userRepository : UserRepository,
+    @inject(AuthenticationBindings.CURRENT_USER, {optional: true})
+    private user: {name: string; id: string; token: string}
   ) {}
-
+  
+  //Create a new chat with a person
+  //this applies to both user and group chat
+  @authenticate('BearerStrategy')
   @post('/chats', {
     responses: {
       '200': {
@@ -33,41 +43,14 @@ export class ChatsController {
       },
     },
   })
-  async create(@requestBody() chats: Chats): Promise<Chats> {
+  async create(
+    @requestBody() chats: Chats): Promise<Chats> {
     return await this.chatsRepository.create(chats);
   }
 
-  @get('/chats/count', {
-    responses: {
-      '200': {
-        description: 'Chats model count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async count(
-    @param.query.object('where', getWhereSchemaFor(Chats)) where?: Where,
-  ): Promise<Count> {
-    return await this.chatsRepository.count(where);
-  }
-
+  //search a chat by the user id
+  @authenticate('BearerStrategy')
   @get('/chats', {
-    responses: {
-      '200': {
-        description: 'Array of Chats model instances',
-        content: {
-          'application/json': {
-            schema: {type: 'array', items: {'x-ts-type': Chats}},
-          },
-        },
-      },
-    },
-  })
-  async find(): Promise<Chats[]> {
-    return await this.chatsRepository.find();
-  }
-
-  @get('/chats/{id}', {
     responses: {
       '200': {
         description: 'Chats model instance',
@@ -75,10 +58,12 @@ export class ChatsController {
       },
     },
   })
-  async findById(@param.path.string('id') id: string): Promise<Chats> {
-    return await this.chatsRepository.findById(id);
+  async findchats(@param.query.string('userid') userid: string): Promise<Chats[]> {
+  return await this.chatsRepository.find()
+  .then(chats => chats.filter(chat => (chat.userlist.indexOf(userid)! == -1)));
   }
 
+  @authenticate('BearerStrategy')
   @put('/chats/{id}', {
     responses: {
       '204': {
@@ -93,6 +78,7 @@ export class ChatsController {
     await this.chatsRepository.replaceById(id, chats);
   }
 
+  @authenticate('BearerStrategy')
   @del('/chats/{id}', {
     responses: {
       '204': {

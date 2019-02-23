@@ -3,16 +3,16 @@ import {
   CountSchema,
   repository,
   Where,
+  Fields
 } from '@loopback/repository';
 import {
   post,
   param,
   get,
-  getWhereSchemaFor,
-  patch,
   put,
   del,
   requestBody,
+  getFieldsJsonSchemaFor,
 } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
@@ -91,7 +91,6 @@ export class UsersController {
     return {token: this.user.token};
   }
 
-
   //We will use bearer strategy to use the token when the user logs in
   @authenticate('BearerStrategy')
   @get('/users', {
@@ -107,9 +106,11 @@ export class UsersController {
     },
   })
   async find(): Promise<User[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({fields: {username: true,id: true}});
   }
 
+  //if we need to get some user in special
+  @authenticate('BearerStatregy')
   @get('/users/{id}', {
     responses: {
       '200': {
@@ -122,6 +123,8 @@ export class UsersController {
     return await this.userRepository.findById(id);
   }
 
+  // To edit the username
+  @authenticate('BearerStrategy')
   @put('/users/{id}', {
     responses: {
       '204': {
@@ -129,21 +132,46 @@ export class UsersController {
       },
     },
   })
-  async replaceById(
+  async edituser(
     @param.path.string('id') id: string,
-    @requestBody() user: User,
-  ): Promise<void> {
-    await this.userRepository.replaceById(id, user);
+    @requestBody() request: User){ 
+    
+    // if the username wants to get changed we need to check if the new one is duplicated
+    let a = await this.checkname(request.username,id);
+    
+    //if its not duplicated we change it and save it, if it is, its rejected
+    if (!a){
+      return await this.userRepository.findById(id).then(
+        newdata => {
+          newdata.username = request.username ? request.username : newdata.username;
+          this.userRepository.save(newdata);
+          return Promise.resolve({status: 200});
+        },
+        () => Promise.reject({status: 400})
+      );
+    }
+
   }
 
-  @del('/users/{id}', {
+  //If we want to change the password
+  @authenticate('BearerStrategy')
+  @put('/users/password/{id}', {
     responses: {
-      '204': {
-        description: 'User DELETE success',
-      },
-    },
-  })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.userRepository.deleteById(id);
+      '200': {
+        description: 'password changed',
+      }
+    }
+  })async editpassword(
+    @param.query.password('pass') pass: string,
+    @requestBody() request: User){
+      let a = await this.userRepository.findById(request.id).then(
+        newpass =>{
+          newpass.password = request.password;
+          this.userRepository.save(newpass);
+          return Promise.resolve({status: 200})
+        },
+        () => Promise.reject({status: 400})
+      )
   }
+
 }
