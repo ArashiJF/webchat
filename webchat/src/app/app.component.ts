@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChatService } from './chat/chat.service'; 
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'webchat';
+  message: string;
+  
+  constructor(private chatservice: ChatService) {
+  }
+ 
+  
+  sendMessage(){
+    this.chatservice.sendMessage(this.message);
+    this.message = '';
+  }
 }
