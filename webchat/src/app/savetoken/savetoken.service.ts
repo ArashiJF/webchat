@@ -19,4 +19,8 @@ export class SavetokenService {
     localStorage.removeItem('chatoken'+name);
   }
 
+  clear(){
+    localStorage.clear();
+  }
+
 }

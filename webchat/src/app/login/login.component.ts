@@ -6,7 +6,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -25,11 +26,11 @@ export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
-  
+  previousurl: string;
   constructor(
     private api : ApiService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (this.api.isAuthenticated()){

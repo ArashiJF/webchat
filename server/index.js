@@ -1,20 +1,27 @@
 //followed initial steps in configuring from https://codingblast.com/chat-application-angular-socket-io/
-let express = require('express');
-let app = express();
+//from here too! https://socket.io/get-started/chat
 
-let http = require('http');
-let server = http.Server(app);
+var express = require('express');
+var app = express();
 
-let socketIO = require('socket.IO');
-let io = socketIO(server);
+var http = require('http');
+var server = http.Server(app);
+
+var socketIO = require('socket.io');
+var io = socketIO(server);
 
 const port = process.env.PORT || 4000;
 
 io.on('connection', (socket) => {
     console.log('user connected');
-    socket.on('new-message',(message) => {
+
+    socket.on('disconnect', () =>{
+        console.log('user disconnected');
+    });
+
+    socket.on('new-message', (message) => {
         console.log(message);
-    })
+    });
 });
 
 server.listen(port, () =>{

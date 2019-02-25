@@ -1,3 +1,14 @@
-<p>
-  chatbox works!
-</p>
+<mat-toolbar color="warn">
+  <span>Welcome {{ username }}!</span>
+  <span class="fill-remaining-space"></span>
+  <span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="editname()">Edit username</button>
+      <button mat-menu-item (click)="editpass()">Edit pass</button>
+      <button mat-menu-item (click)="logout()">Log out :c</button>
+    </mat-menu>
+  </span>
+</mat-toolbar>

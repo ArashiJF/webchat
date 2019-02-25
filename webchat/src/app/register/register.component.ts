@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  //a little animation whenever you enter the endpoint
   animations: [
     trigger('fadeIn',[
       transition(':enter',[

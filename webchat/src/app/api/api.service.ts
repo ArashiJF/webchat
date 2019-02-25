@@ -9,6 +9,8 @@ import { User } from '../models/user.model';
 import { Messages } from '../models/messages.model';
 import { filter } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { throwError } from 'rxjs';
+import { ChatService } from '../chat/chat.service';
 
 
 @Injectable({
@@ -20,10 +22,13 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
+    private chatservice: ChatService,
     private tokenservice: SavetokenService,
     private notice: NoticeService,
     private router: Router,
-  ) {}
+  ) {
+    this.token = this.tokenservice.get('token');
+  }
   
   // AUTHENTICATION OPERATIONS
 
@@ -45,7 +50,9 @@ export class ApiService {
     //using the service called token we unset the user and its token and redirect to the login page
     this.tokenservice.unset('user');
     this.tokenservice.unset('token');
-    this.router.navigateByUrl('/login');
+    this.token = null;
+    this.chatservice.onlogout();
+    this.router.navigateByUrl('/');
   }
 
   //login function
@@ -151,5 +158,86 @@ export class ApiService {
     })
   }
 
+  // CHAT AND MESSAGES OPERATIONS
+  createchat(title: string, userlist: string[], message: Messages[], chattype: number){
+    this.http.post(this.apiUrl+'/chats',{
+      title: title,
+      userlist: userlist,
+      message: message,
+      chattype: chattype,
+    },
+    {
+      headers:{
+        'content-type': 'application/json',
+        Authorization: 'Bearer '+ this.token
+      }
+  }).subscribe(
+    r => {
+      this.notice.show('Chat created');
+    },
+    //in case there is a problem when creating the chat
+    //we throw the error
+    err => {
+      console.log(err);
+      this.notice.show("error!");
+    }
+  );
+  }
+
+  //Get the chats the user makes part of
+  getchats(id: string){
+    return this.http.get<Chats[]>(this.apiUrl + '/chats',{
+      params:{
+        userid: id,
+      },
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + this.token
+      }
+    });
+  }
+
+  //update chats
+  //in this case, everytime a user makes a response
+  //we will save said message inside the database
+  updatemessages(id: string, chat: Chats){
+    this.http.put(this.apiUrl+'/chats', chat,{
+      params:{
+        id: id
+      },
+      headers:{
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + this.token
+      }
+    });
+  }
+  //delete user from group chat
+  //we will need to edit the userlist parameter for that
+  deleteuserfromchat(id: string,chat: Chats){
+    //we cant allow empty chats
+    if(chat.userlist.length > 1)
+    {
+      this.http.put(this.apiUrl+'/chats',chat,{
+        params:{
+          id: id
+        },
+        headers:{
+          'content-type': 'application/json',
+          Authorization: 'Bearer ' + this.token
+        }
+      }).subscribe(
+        r => {
+          this.notice.show("user deleted!")
+        },
+        err =>{
+          console.log(err),
+          this.notice.show("Error!")
+        }
+      );
+    }
+    else{
+      this.notice.show("you cant delete yourself!")  
+    }  
+  }
 
 }

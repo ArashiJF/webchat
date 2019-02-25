@@ -14,14 +14,18 @@ export class ChatService {
   }
 
   public sendMessage(message){
-    this.socket.emit('new-message',message);
+    this.socket.emit('new-message', message);
+  }
+
+  public onlogout(){
+    this.socket.disconnect();
   }
 
   public getMessages = () =>{
     return Observable.create((observer) => {
       this.socket.on('new-message', (message) => {
         observer.next(message);
-      })
-    })
+      });
+    });
   }
 }

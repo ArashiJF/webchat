@@ -19,12 +19,19 @@ import {
   MatIconModule,
   MatMenuModule,
   MatToolbarModule,
+  MatListModule,
+  MatTabsModule,
   
 } from '@angular/material';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChatService } from './chat/chat.service';
+import { LogoutComponent } from './logout/logout.component';
+import { EditusernameComponent } from './editusername/editusername.component';
+import { PassComponent } from './pass/pass.component';
+import { GroupchatComponent } from './groupchat/groupchat.component';
 
 
 @NgModule({
@@ -33,7 +40,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ChatboxComponent,
     LoginComponent,
     RegisterComponent,
-    UserComponent
+    UserComponent,
+    LogoutComponent,
+    EditusernameComponent,
+    PassComponent,
+    GroupchatComponent
   ],
   imports: [
     HttpClientModule,
@@ -52,9 +63,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatListModule,
+    MatTabsModule
   ],
-  providers: [],
+  providers: [ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

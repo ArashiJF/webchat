@@ -4,6 +4,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { AuthGuardService } from './authguard/auth-guard.service';
+import { LogoutComponent } from './logout/logout.component';
+import { EditusernameComponent } from './editusername/editusername.component';
+import { PassComponent } from './pass/pass.component';
 
 const routes: Routes = 
 [
@@ -27,6 +30,21 @@ const routes: Routes =
     component: ChatboxComponent,
     canActivate: [AuthGuardService],
     data: {title: 'Welcome Back!'}
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent,
+    data: {title: 'goodbye!'}
+  },
+  {
+    path: 'edit-username',
+    component: EditusernameComponent,
+    data: {title: 'edit your data'}
+  },
+  {
+    path: 'edit-pass',
+    component: PassComponent,
+    data: {title: 'edit your auth'}
   },
   { path:'**', redirectTo: ''}
 ];
