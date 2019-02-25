@@ -64,7 +64,7 @@ export class ChatsController {
   }
 
   @authenticate('BearerStrategy')
-  @put('/chats/{id}', {
+  @put('/chats', {
     responses: {
       '204': {
         description: 'Chats PUT success',
@@ -72,21 +72,21 @@ export class ChatsController {
     },
   })
   async replaceById(
-    @param.path.string('id') id: string,
+    @param.query.string('id') id: string,
     @requestBody() chats: Chats,
   ): Promise<void> {
     await this.chatsRepository.replaceById(id, chats);
   }
 
   @authenticate('BearerStrategy')
-  @del('/chats/{id}', {
+  @del('/chats/', {
     responses: {
       '204': {
         description: 'Chats DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
+  async deleteById(@param.query.string('id') id: string): Promise<void> {
     await this.chatsRepository.deleteById(id);
   }
 }

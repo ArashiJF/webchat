@@ -1,0 +1,29 @@
+.login-form{
+    width: 300px;
+}
+
+.parent.registry-container{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 120px;
+
+}
+
+.parent-login-container{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.grand-parent-login-container{
+    display: table;
+    height: 100%;
+    margin: 0 auto;
+}
+
+form {
+    width: 100%;
+    mat-form-field {
+        width: 100%;
+    }
+}

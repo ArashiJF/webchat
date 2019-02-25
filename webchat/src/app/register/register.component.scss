@@ -1,0 +1,29 @@
+.register-form{
+    width: 300px;
+}
+
+.title{
+    height: 100%;
+}
+
+.fill-remaining-space{
+    flex: 1 1 auto;
+}
+
+.parent-login-container{
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.grand-parent-login-container{
+    display: table;
+    height: 50%;
+    margin: auto;
+}
+
+form {
+    width: 100%;
+    mat-form-field {
+        width: 100%;
+    }
+}

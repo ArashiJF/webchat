@@ -111,7 +111,7 @@ export class UsersController {
 
   //if we need to get some user in special
   @authenticate('BearerStatregy')
-  @get('/users/{id}', {
+  @get('/users', {
     responses: {
       '200': {
         description: 'User model instance',
@@ -119,13 +119,13 @@ export class UsersController {
       },
     },
   })
-  async findById(@param.path.string('id') id: string): Promise<User> {
+  async findById(@param.query.string('id') id: string): Promise<User> {
     return await this.userRepository.findById(id);
   }
 
   // To edit the username
   @authenticate('BearerStrategy')
-  @put('/users/{id}', {
+  @put('/users', {
     responses: {
       '204': {
         description: 'User PUT success',
@@ -133,15 +133,14 @@ export class UsersController {
     },
   })
   async edituser(
-    @param.path.string('id') id: string,
     @requestBody() request: User){ 
     
     // if the username wants to get changed we need to check if the new one is duplicated
-    let a = await this.checkname(request.username,id);
+    let a = await this.checkname(request.username,request.id);
     
     //if its not duplicated we change it and save it, if it is, its rejected
     if (!a){
-      return await this.userRepository.findById(id).then(
+      return await this.userRepository.findById(request.id).then(
         newdata => {
           newdata.username = request.username ? request.username : newdata.username;
           this.userRepository.save(newdata);
@@ -155,7 +154,7 @@ export class UsersController {
 
   //If we want to change the password
   @authenticate('BearerStrategy')
-  @put('/users/password/{id}', {
+  @put('/users/password/', {
     responses: {
       '200': {
         description: 'password changed',

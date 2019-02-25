@@ -1,0 +1,67 @@
+<div class="grand-parent-title-container">
+  <div class="parent-title-container">
+    <mat-toolbar class="title" color="warn">
+      <span>Registration</span>
+      <span class="fill-remaining-space"></span>
+      <span>
+        <button
+          mat-raised-button
+          color="warn"
+          mat-button [matMenuTriggerFor]="menu"
+          >
+          <mat-icon>°°°</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              (click)="gotologin()"
+            >
+            Login
+            </button>
+          </mat-menu>
+        </button>
+      </span>
+    </mat-toolbar>
+  </div>
+</div>
+
+
+
+<div class="grand-parent-login-container">     
+    <div class="parent-login-container">
+      <mat-card class="register-form">
+        <mat-card-title>Please enter your information</mat-card-title>
+        <mat-card-content>
+          <form @fadeIn>
+            <mat-form-field>
+              <input
+                type="text"
+                matInput
+                placeholder="Enter your Username"
+                [(ngModel)]="username"
+                name="uname"
+                />
+            </mat-form-field>
+            <mat-form-field>
+              <input 
+                type="password"
+                matInput
+                placeholder="Enter your Password"
+                [(ngModel)]="password"
+                name="upassword"
+                />
+            </mat-form-field>
+          </form>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="warn"
+            matTooltip="Register"
+            (click)="registration()"
+          >
+            <mat-icon style="text-align:center">Send</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
