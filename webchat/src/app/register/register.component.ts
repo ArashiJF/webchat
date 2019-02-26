@@ -9,6 +9,10 @@ import {
 } from '@angular/animations';
 import { Router } from '@angular/router';
 
+//the registration component controls the registration into the database
+//if you register succesfully you are redirected to the chat route
+//automatically
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

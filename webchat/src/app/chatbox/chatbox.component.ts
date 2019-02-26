@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 import { ApiService } from '../api/api.service';
-import { observable } from 'rxjs';
+import { observable, Observable } from 'rxjs';
 import { SavetokenService } from '../savetoken/savetoken.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-chatbox',
@@ -12,24 +13,43 @@ import { SavetokenService } from '../savetoken/savetoken.service';
 })
 export class ChatboxComponent implements OnInit {
 
+  message: string;
+  messages: string[] = [];
+  id: string;
+  _username: string='';
+  users: User[] = [];
+
   constructor(
     private router: Router,
     private api: ApiService,
     public chat: ChatService,
     private token: SavetokenService
-  ) { }
+  ) {
+    this.api.getallusers().subscribe( (r: User[] )=>{
+      this.users = r;
+    });
+    
+  }
 
-  message: string;
-  messages: string[] = [];
-  id: string;
-  username: string;
-
+  
   ngOnInit() {
     //retrieve messages from the socket and show them in the app
-    this.chat.getMessages().subscribe((message: string)=>{
-      this.messages.push(message);
-    })
-    this.username = this.token.get('user')
+    this.chat.getMessages().subscribe(msg =>{
+      console.log(msg);
+      this.messages.push(msg);
+    });
+
+    this._username = this.token.get('user');
+  }
+
+  editname(){
+    //redirecto to page to change username
+    this.router.navigateByUrl('/edit-username');
+  }
+
+  editpass(){
+    //redirect to page to change password
+    this.router.navigateByUrl('edit-pass')
   }
 
   sendMessage() {

@@ -9,6 +9,10 @@ import {
 import { Router, NavigationEnd } from '@angular/router';
 import {filter} from 'rxjs/operators';
 
+//login component is the homepage of the application for now
+//if you log in you are redirected to the chat route, or
+//you can also go to the registration route.
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -26,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
-  previousurl: string;
+
   constructor(
     private api : ApiService,
     private router: Router

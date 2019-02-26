@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 
+//This service is for saving the tokens and usernames for the application
+//on logout the token and username are removed
+
+//There is an extra function for clearing the localStorage completely
+
 @Injectable({
   providedIn: 'root'
 })

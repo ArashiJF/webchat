@@ -7,6 +7,14 @@ import { UserRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { verify, sign } from 'jsonwebtoken';
 
+//We can use dependency injection to add even more types of authentication protocols
+//Most of this code was taken from this github repository, which corresponds
+//to project from UTB, https://github.com/IngenieriaDeSistemasUTB/aquappservice
+//which said provider was based off from the github repo where its explained how to
+//add authentication bindings for LoopBack 
+//https://github.com/strongloop/loopback-next/tree/master/packages/authentication
+//its explained the steps to take and what to do mostly for the dependency injection for the authentication 
+//provider.
 
 export class AuthenticationProvider implements Provider<Strategy | undefined> {
     constructor(
@@ -15,6 +23,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
         @repository(UserRepository) public userRepository: UserRepository,
     ) {}
     
+
     value(): ValueOrPromise<Strategy | undefined>{
         // if the function was not decorated we dont need to apply authentication
         if (!this.metadata){
@@ -93,7 +102,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
                      process.env.SECRET_KEY || 'nobume',
                 )
             });
-          },
+          }, //error catchs
           reason => {
               cb(reason, false);
           },
@@ -103,6 +112,7 @@ export class AuthenticationProvider implements Provider<Strategy | undefined> {
         });
     }
     
+    //For the bearer strategy we use the function verify from jsonwebtoken
     async verifytoken(
         token: string,
         cb: (err: Error | null, user?: any) => void,

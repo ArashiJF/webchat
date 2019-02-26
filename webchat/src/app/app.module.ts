@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { UserComponent } from './user/user.component';
 import { 
   MatButtonModule, 
   MatSidenavModule, 
@@ -40,7 +39,6 @@ import { GroupchatComponent } from './groupchat/groupchat.component';
     ChatboxComponent,
     LoginComponent,
     RegisterComponent,
-    UserComponent,
     LogoutComponent,
     EditusernameComponent,
     PassComponent,

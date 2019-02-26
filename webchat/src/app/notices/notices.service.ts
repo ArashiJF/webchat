@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
+//this implementation lets us show messages anywhere on the application
+//it was taken from Aquapp too.
+
 @Injectable({
   providedIn: 'root'
 })

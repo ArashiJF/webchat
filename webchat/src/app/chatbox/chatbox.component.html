@@ -1,5 +1,5 @@
-<mat-toolbar color="warn">
-  <span>Welcome {{ username }}!</span>
+<mat-toolbar class="uptoolbar" color="warn">
+  <span>Welcome {{ _username }}!</span>
   <span class="fill-remaining-space"></span>
   <span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -12,3 +12,33 @@
     </mat-menu>
   </span>
 </mat-toolbar>
+<div class="app">
+  <aside class="sidebar">
+    <section class="online-members">
+      <h2>Users in database</h2>
+      <ul class="user-list">
+        <li *ngFor="let user of users">
+          <span>{{user.username}}</span>
+        </li>
+      </ul>
+    </section> 
+  </aside>
+  <main class="chat-window">
+    <header class="chat-header">
+      <h1>Chat</h1>
+      <span class="participants"></span>
+    </header>
+    <section class="chat-session">
+      <ul class="message-list">
+        <li class="user-message" *ngFor="let message of messages">
+          <span>{{message}}</span>
+        </li>
+      </ul>
+    </section>
+    <footer class="chat-footer">
+      <form (ngSubmit)='sendMessage()'>
+        <input placeholder="Type a message. Hit enter to send" type="text" name="message" [(ngModel)]="message">
+      </form>
+    </footer>
+  </main>
+</div>

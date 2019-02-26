@@ -1,5 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
+//the Messages module to add said attribute in the chat model.
+
 @model()
 export class Messages extends Entity {
   @property({

@@ -84,7 +84,8 @@ export class UsersController {
 
   //getting a list of all the users in the database, from here onwards we will apply authentication.for that
   //We will add a post for login
-  
+  //the login uses a basic HTTP strategy for authentication
+  //after that we get a token in response.
   @authenticate('BasicStrategy')
   @post('/users/login')
   async login(){
@@ -111,7 +112,7 @@ export class UsersController {
 
   //if we need to get some user in special
   @authenticate('BearerStatregy')
-  @get('/users', {
+  @get('/user', {
     responses: {
       '200': {
         description: 'User model instance',
@@ -123,7 +124,7 @@ export class UsersController {
     return await this.userRepository.findById(id);
   }
 
-  // To edit the username
+  //Endpoint to edit the username
   @authenticate('BearerStrategy')
   @put('/users', {
     responses: {

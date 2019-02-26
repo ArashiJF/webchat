@@ -4,6 +4,9 @@ import { ApiService } from '../api/api.service';
 import { SavetokenService } from '../savetoken/savetoken.service';
 import { ChatService } from '../chat/chat.service';
 
+//log out is only a middlepage between the chat box and the login box
+//to make the navigation more seamessly and natural
+
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',

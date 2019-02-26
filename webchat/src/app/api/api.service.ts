@@ -44,6 +44,8 @@ export class ApiService {
     const istoken = this.tokenservice.get('token');
     return helper.isTokenExpired(istoken);
   }
+
+  
   // logout and login functions
   //logout if you are logged out you are sent to the login page again
   logout(){
@@ -124,7 +126,7 @@ export class ApiService {
 
   //getting user by its id
   getuser(id: string){
-    return this.http.get<User>(this.apiUrl+'/users',{
+    return this.http.get<User>(this.apiUrl+'/user',{
       params:{
         id: id
       },
