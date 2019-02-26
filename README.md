@@ -42,4 +42,4 @@ Webchat will be open on port 4200
 Now if you would rather run only one command you need docker and docker-compose, with them from this project's root just run:
  - docker-compose up
 
-And 3 containers will be created.
+And 4 containers will be created.
