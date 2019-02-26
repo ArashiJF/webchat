@@ -1,0 +1,55 @@
+<div class="parent-register-container">
+    <button  
+      mat-raised-button
+      color="warn"
+      mat-button [matMenuTriggerFor]="menu"> 
+      <mat-icon>°°°</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button 
+        mat-menu-item
+        (click)="gotoregister()"
+        >
+        Register
+      </button>
+    </mat-menu>    
+</div>
+<div class="grand-parent-login-container">  
+  <div class="parent-login-container">
+    <mat-card class="login-form">
+      <mat-card-title>Login to WebChat</mat-card-title>
+      <mat-card-content>
+        <form @fadeIn>
+          <mat-form-field>
+            <input
+              type="text"
+              matInput
+              placeholder="Username"
+              [(ngModel)]="username"
+              name="uname"
+              />
+          </mat-form-field>
+          <mat-form-field>
+            <input 
+              type="password"
+              matInput
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="upassword"
+              />
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="warn"
+          matTooltip="Log in"
+          (click)="authenticate()"
+        >
+          <mat-icon>arrow_forward_ios</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
