@@ -25,4 +25,4 @@ RUN npm install
 RUN npm start
 RUN npm stop
 
-CMD pm2 start ecosystem.config.js --env development --no-daemon
+CMD pm2 start ecosystem.config.js --env production --no-daemon

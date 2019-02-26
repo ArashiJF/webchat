@@ -1,6 +1,6 @@
 module.exports = {
     apps : [{
-      name: 'webchat API',
+      name: 'api',
       script: 'index.js',
   
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
