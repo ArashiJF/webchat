@@ -3,8 +3,9 @@
 [![LoopBack](https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
 
 # Testing:
-By default loopback 4 has a explorer for the endpoints to access them you will need to specify the url in this case:
- - localhost:3000
+By default loopback 4 has an explorer for the endpointsm to access them you will need to specify the url which in this case is:
+ - localhost:3000/explorer
+
 You will be able to see all the endpoints for the api, but you will only have access to get /users/newuser and /ping.
 This is due to the implementation of an authentication provider.
 
