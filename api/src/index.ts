@@ -5,6 +5,14 @@ export {Api};
 
 export async function main(options: ApplicationConfig = {}) {
   const app = new Api(options);
+
+  //options for deployment
+  if (!options) options = {};
+  if (!options.rest) options.rest = {};
+
+  options.rest.port = 3000;
+  options.rest.host = '0.0.0.0';
+
   await app.boot();
   await app.start();
 

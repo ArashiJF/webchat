@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+   chatmongodb:
+     image: "mongo:4.0.5"
+     ports:
+      -  27017:27017
+   
+   api:
+     build: ./api
+     ports:
+       - 3000:3000
+     depends_on:
+       - chatmongodb
+   
+   express:
+     build: ./server
+     ports:
+      - 4000:4000
+     depends_on:
+      - api
+
+   webchat:
+     build: ./webchat
+     ports:
+       - 4200:4200
+     depends_on:
+       - api
+   
+  
