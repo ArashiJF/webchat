@@ -2,7 +2,7 @@
   "name": "chatdb",
   "connector": "mongodb",
   "url": "",
-  "host": "localhost",
+  "host": "chatmongodb",
   "port": 27017,
   "user": "",
   "password": "",
