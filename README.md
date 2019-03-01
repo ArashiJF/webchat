@@ -6,6 +6,8 @@ The project consists in 3 parts, the api, the server based in express and socket
 # Note:
 - please add chatmongodb to your hostfile, be it /etc/hosts in linux or C:\Windows\System32\drivers\etc\hosts in windows, add it like this:
  - 127.0.0.1 chatmongodb
+The last step is A # MUST 
+
 
 If you wish to launch the application manually you need to have:
  - nodejs 
@@ -20,13 +22,13 @@ after they are both installed, you will need to enter each folder to start the a
 
 In api you will need to run:
  - npm install
- - npm start
+ - node .
 
 The api will start and will be listening on port 3000
 
 In server you will need to run:
  - npm install
- - ng index.js
+ - node index.js
 
 The server will be open on port 4000
 
