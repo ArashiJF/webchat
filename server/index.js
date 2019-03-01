@@ -11,6 +11,7 @@ var socketIO = require('socket.io');
 var io = socketIO(server);
 
 const port = process.env.PORT || 4000;
+const messages = [];
 
 //When Started socket.io will listen whenever a user joins the namespace
 io.on('connection', (socket) => {
@@ -26,8 +27,15 @@ io.on('connection', (socket) => {
     //and also emit the message to anyone in the session
     socket.on('new-message', (message) => {
         console.log(message);
-        io.emit(message);
+        messages.push(message);
+        //emit the list of messages on new message
+        io.emit("messages", messages);
+        //emit the message that was just sent
+        socket.emit("message",message);
     });
+    //if new user connects, emit all the messages that might have been already
+    //Sent
+    io.emit("messages", messages);
 });
 
 //the server is listening to this port

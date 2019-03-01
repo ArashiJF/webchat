@@ -5,6 +5,7 @@ import { ApiService } from '../api/api.service';
 import { observable, Observable } from 'rxjs';
 import { SavetokenService } from '../savetoken/savetoken.service';
 import { User } from '../models/user.model';
+import { Messages } from '../models/messages.model';
 
 @Component({
   selector: 'app-chatbox',
@@ -14,7 +15,7 @@ import { User } from '../models/user.model';
 export class ChatboxComponent implements OnInit {
 
   message: string;
-  messages: string[] = [];
+  messages: Messages[] = [];
   id: string;
   _username: string='';
   users: User[] = [];
@@ -28,17 +29,16 @@ export class ChatboxComponent implements OnInit {
     this.api.getallusers().subscribe( (r: User[] )=>{
       this.users = r;
     });
-    
+    this.chat.onlogin();
   }
 
   
   ngOnInit() {
     //retrieve messages from the socket and show them in the app
     this.chat.getMessages().subscribe(msg =>{
-      console.log(msg);
-      this.messages.push(msg);
+      this.messages = msg;
     });
-
+    
     this._username = this.token.get('user');
   }
 
@@ -53,7 +53,7 @@ export class ChatboxComponent implements OnInit {
   }
 
   sendMessage() {
-    //send messages to the socket 
+    //send messages to the socket
     this.chat.sendMessage(this.message);
     this.message = '';
   }

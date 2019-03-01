@@ -31,7 +31,7 @@
     <section class="chat-session">
       <ul class="message-list">
         <li class="user-message" *ngFor="let message of messages">
-          <span>{{message}}</span>
+          <span>{{ message.id }}: {{ message.text}}</span>
         </li>
       </ul>
     </section>
