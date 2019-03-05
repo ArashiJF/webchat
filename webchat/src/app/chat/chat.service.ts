@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { SavetokenService } from "../savetoken/savetoken.service";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private url = 'http://localhost:4000'
+  private url = environment.socketUrl;
   private socket;
 
   constructor(public tokenService: SavetokenService) { 
