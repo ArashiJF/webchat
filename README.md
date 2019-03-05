@@ -25,7 +25,7 @@ In api you will need to run:
  These 2 commands are for building the api:
  - npm start
  - npm stop
- And then we start it without using pm2.
+And then we start it without using pm2.
  - node .
 
 The api will start and will be listening on port 3000
